@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bit String Converter</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 flex justify-center items-center min-h-screen">
+    <div class="bg-white p-8 rounded shadow-md w-96">
+        <h1 class="text-2xl font-bold mb-4">Bit String Converter</h1>
+        <div class="mb-4 relative">
+            <label for="bitInput" class="block text-gray-700">Bit String:</label>
+            <input type="text" id="bitInput" class="w-full mt-2 p-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Enter bit string">
+            <button id="copyBitBtn" class="absolute top-10 right-2 bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                Copy
+            </button>
+        </div>
+        <div class="mb-4 relative">
+            <label for="charInput" class="block text-gray-700">Decoded String:</label>
+            <input type="text" id="charInput" class="w-full mt-2 p-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Enter string">
+            <button id="copyCharBtn" class="absolute top-10 right-2 bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                Copy
+            </button>
+        </div>
+    </div>
+
+    <script>
+        const bitInput = document.getElementById('bitInput');
+        const charInput = document.getElementById('charInput');
+        const copyBitBtn = document.getElementById('copyBitBtn');
+        const copyCharBtn = document.getElementById('copyCharBtn');
+
+        // Convert bit string to characters
+        function decodeBitString(bitString) {
+            const bitsArray = bitString.trim().split(' ');
+            return bitsArray.map(bits => {
+                const charCode = parseInt(bits, 2);
+                return String.fromCharCode(charCode);
+            }).join('');
+        }
+
+        // Convert characters to bit string
+        function encodeStringToBits(inputString) {
+            return inputString.split('').map(char => {
+                return char.charCodeAt(0).toString(2).padStart(8, '0');
+            }).join(' ');
+        }
+
+        // Event listeners for input conversion
+        bitInput.addEventListener('input', () => {
+            const decoded = decodeBitString(bitInput.value);
+            charInput.value = decoded;
+        });
+
+        charInput.addEventListener('input', () => {
+            const encoded = encodeStringToBits(charInput.value);
+            bitInput.value = encoded;
+        });
+
+        // Copy to clipboard function
+        function copyToClipboard(text) {
+            navigator.clipboard.writeText(text).then(() => {
+                alert('Copied to clipboard!');
+            }).catch(err => {
+                console.error('Failed to copy: ', err);
+            });
+        }
+
+        // Event listeners for copy buttons
+        copyBitBtn.addEventListener('click', () => {
+            copyToClipboard(bitInput.value);
+        });
+
+        copyCharBtn.addEventListener('click', () => {
+            copyToClipboard(charInput.value);
+        });
+    </script>
+</body>
+</html>
